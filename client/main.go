@@ -17,10 +17,15 @@ func main() {
 	listFlag := flag.Bool("list", false, "get the blockchain")
 	flag.Parse()
 
+	if flag.NArg() < 1 {
+		log.Fatalf("[ERROR] missing subcommand")
+	}
+
 	conn, err := grpc.Dial("localhost:8080", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("[ERROR] no connection => %v", err)
 	}
+	defer conn.Close()
 
 	client = proto.NewBlockchainClient(conn)
 
